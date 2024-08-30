@@ -7,7 +7,7 @@ import org.springframework.context.annotation.PropertySource;
 
 @Configuration
 @Data
-@PropertySource("application.properties")
+@PropertySource("security.properties")
 public class BotConfig {
     @Value("${bot.name}")
     String username;
