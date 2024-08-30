@@ -1,9 +1,6 @@
 package com.example.gavno;
 
-import com.example.gavno.Command.Command;
-import com.example.gavno.Command.HelpCommand;
-import com.example.gavno.Command.MeCommand;
-import com.example.gavno.Command.StartCommand;
+import com.example.gavno.Command.*;
 import com.example.gavno.Config.BotConfig;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -22,11 +19,13 @@ public class TelegramBot extends TelegramLongPollingBot {
     private static final Map<String, Command> commandMap = Map.of(
             "/start", new StartCommand(),
             "/help", new HelpCommand(),
-            "/me", new MeCommand()
+            "/me", new MeCommand(),
+            "/buy", new BuyCommand()
     );
     private final BotConfig config;
 
-    private final HashMap<Long, User> users;
+    private final UserRepository userRepository;
+    private final OrderRepository orderRepository;
 
     @Override
     public String getBotUsername() {
@@ -46,7 +45,7 @@ public class TelegramBot extends TelegramLongPollingBot {
 
         message.setChatId(chatId);
         if (command != null) {
-            command.execute();
+            command.execute(update);
             message.setText("Такая команда существует!");
         } else {
             message.setText("Неизвестная команда, попробуйте /help");
