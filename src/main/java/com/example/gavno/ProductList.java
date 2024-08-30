@@ -12,6 +12,6 @@ public class ProductList {
     @GeneratedValue
     private Long id;
     private Long orderId;
-    private int name;
+    private String name;
     private int count;
 }
