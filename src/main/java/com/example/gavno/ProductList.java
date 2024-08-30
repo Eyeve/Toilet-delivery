@@ -7,11 +7,11 @@ import lombok.Data;
 
 @Data
 @Entity
-public class Order {
+public class ProductList {
     @Id
     @GeneratedValue
     private Long id;
-    private Long buyerId;
-    private int sum;
-
+    private Long orderId;
+    private int name;
+    private int count;
 }
