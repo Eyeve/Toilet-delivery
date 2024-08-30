@@ -3,13 +3,13 @@ package com.example.gavno;
 import com.example.gavno.Command.*;
 import com.example.gavno.Config.BotConfig;
 import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
-import java.util.HashMap;
 import java.util.Map;
 
 @Component
@@ -17,13 +17,15 @@ import java.util.Map;
 public class TelegramBot extends TelegramLongPollingBot {
     private final BotConfig config;
 
+    @Autowired
     private final UserRepository userRepository;
+    @Autowired
     private final OrderRepository orderRepository;
     private final Map<String, Command> commandMap = Map.of(
             "/start", new StartCommand(),
             "/help", new HelpCommand(),
             "/me", new MeCommand(),
-            "/buy", new BuyCommand(userRepository, orderRepository)
+            "/buy", new BuyCommand()
     );
 
     @Override
