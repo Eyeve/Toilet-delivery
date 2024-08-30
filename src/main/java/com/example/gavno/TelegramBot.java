@@ -15,17 +15,16 @@ import java.util.Map;
 @Component
 @AllArgsConstructor
 public class TelegramBot extends TelegramLongPollingBot {
-
-    private static final Map<String, Command> commandMap = Map.of(
-            "/start", new StartCommand(),
-            "/help", new HelpCommand(),
-            "/me", new MeCommand(),
-            "/buy", new BuyCommand()
-    );
     private final BotConfig config;
 
     private final UserRepository userRepository;
     private final OrderRepository orderRepository;
+    private final Map<String, Command> commandMap = Map.of(
+            "/start", new StartCommand(),
+            "/help", new HelpCommand(),
+            "/me", new MeCommand(),
+            "/buy", new BuyCommand(userRepository, orderRepository)
+    );
 
     @Override
     public String getBotUsername() {
@@ -40,13 +39,13 @@ public class TelegramBot extends TelegramLongPollingBot {
     @Override
     public void onUpdateReceived(Update update) {
         Long chatId = update.getMessage().getChatId();
+        Long userId = update.getMessage().getFrom().getId();
         Command command = commandMap.get(update.getMessage().getText());
         SendMessage message = new SendMessage();
 
         message.setChatId(chatId);
         if (command != null) {
-            command.execute(update);
-            message.setText("Такая команда существует!");
+            message.setText(command.execute(userId));
         } else {
             message.setText("Неизвестная команда, попробуйте /help");
         }
