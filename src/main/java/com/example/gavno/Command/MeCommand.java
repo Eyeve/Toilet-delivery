@@ -9,7 +9,7 @@ public class MeCommand implements Command {
         Orders
      */
     @Override
-    public SendMessage execute(final Update update) {
+    public String execute(Long userId) {
         return null;
     }
 }

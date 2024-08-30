@@ -13,5 +13,6 @@ public class Order {
     private Long id;
     private Long buyerId;
     private int sum;
+    private ProductList productList;
 
 }

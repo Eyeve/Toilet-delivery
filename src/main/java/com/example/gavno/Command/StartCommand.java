@@ -8,7 +8,7 @@ public class StartCommand implements Command {
         Tells about the service
      */
     @Override
-    public SendMessage execute(final Update update) {
-        return null;
+    public String execute(Long userId) {
+        return "Start command!";
     }
 }
