@@ -3,17 +3,17 @@ package com.example.gavno.Command;
 import com.example.gavno.OrderRepository;
 import com.example.gavno.UserRepository;
 import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
-import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
-import org.telegram.telegrambots.meta.api.objects.Update;
+import org.springframework.beans.factory.annotation.Autowired;
 
-//@AllArgsConstructor
+@AllArgsConstructor
 public class BuyCommand implements Command {
     /*
         Displays a menu with a selection of products
      */
-//    private final UserRepository userRepository;
-//    private final OrderRepository orderRepository;
+    @Autowired
+    private final UserRepository userRepository;
+    @Autowired
+    private final OrderRepository orderRepository;
     @Override
     public String execute(Long userId) {
         return null;

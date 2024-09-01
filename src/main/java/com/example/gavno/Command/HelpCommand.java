@@ -10,9 +10,9 @@ public class HelpCommand implements Command {
     @Override
     public String execute(Long userId) {
         return String.format("%s\n%s\n%s",
-                "\\buy - сделать заказ",
-                "\\me - показать информацию о заказах и балансе",
-                "\\help - вывести данное сообщение"
+                "/buy - сделать заказ",
+                "/me - показать информацию о заказах и балансе",
+                "/help - вывести данное сообщение"
         );
     }
 }

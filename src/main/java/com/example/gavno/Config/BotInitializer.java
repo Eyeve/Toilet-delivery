@@ -23,7 +23,7 @@ public class BotInitializer {
         try{
             telegramBotsApi.registerBot(telegramBot);
         } catch (TelegramApiException e){
-
+            // TODO: implementation
         }
     }
 }
