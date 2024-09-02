@@ -11,12 +11,12 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Table(name = "customer_order", indexes = @Index(name = "idx_buyer_id", columnList = "buyerId"))
 public class Order {
+
     @Id
     @GeneratedValue
     private Long id;
     private Long buyerId;
     private Integer sum;
-
     private Integer toiletPaper;
     private Integer instantNoodles;
 

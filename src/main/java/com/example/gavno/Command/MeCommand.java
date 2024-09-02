@@ -1,33 +1,35 @@
 package com.example.gavno.Command;
 
-import com.example.gavno.OrderRepository;
+import com.example.gavno.TelegramBot;
 import com.example.gavno.User;
-import com.example.gavno.UserRepository;
-import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.api.objects.Update;
+import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import java.util.Optional;
 
-@AllArgsConstructor
-public class MeCommand implements Command {
-    /*
-        Payment method details
-        Orders
-     */
+public class MeCommand extends Command {
+
     private static final String PATTERN = "Ваш профиль [%s]";
 
-    @Autowired
-    private final UserRepository userRepository;
-    @Autowired
-    private final OrderRepository orderRepository;
+    public MeCommand(TelegramBot bot) {
+        super(bot);
+    }
     @Override
-    public void execute(Long userId, SendMessage message) {
-        Optional<User> from = userRepository.findById(userId);
+    public void execute(Update update) {
+        Optional<User> from = bot.getUserRepository().findById(update.getMessage().getFrom().getId());
+        SendMessage message;
+        User user;
+
         if (from.isEmpty()) {
-            throw new RuntimeException("Unknown user");
+            throw new RuntimeException("Unknown user"); // TODO: redo
         }
-        User user = from.get();
-        message.setText(String.format(PATTERN, user.getUsername()));
+        user = from.get();
+        message = generateMessage(update.getMessage().getChatId(), String.format(PATTERN, user.getUsername()));
+        try {
+            bot.execute(message);
+        } catch (TelegramApiException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

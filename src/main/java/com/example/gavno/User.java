@@ -13,6 +13,8 @@ import lombok.NoArgsConstructor;
 public class User {
     @Id
     private Long id;
+    private Long chatId;
+    private Integer catalogId;
 
     private String firstName;
     private String lastName;
