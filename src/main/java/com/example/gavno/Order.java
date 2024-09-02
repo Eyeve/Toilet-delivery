@@ -18,5 +18,6 @@ public class Order {
     private Integer sum;
 
     private Integer toiletPaper;
+    private Integer instantNoodles;
 
 }

@@ -5,6 +5,7 @@ import com.example.gavno.User;
 import com.example.gavno.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 
 import java.util.Optional;
 
@@ -14,17 +15,19 @@ public class MeCommand implements Command {
         Payment method details
         Orders
      */
+    private static final String PATTERN = "Ваш профиль [%s]";
+
     @Autowired
     private final UserRepository userRepository;
     @Autowired
     private final OrderRepository orderRepository;
     @Override
-    public String execute(Long userId) {
+    public void execute(Long userId, SendMessage message) {
         Optional<User> from = userRepository.findById(userId);
         if (from.isEmpty()) {
             throw new RuntimeException("Unknown user");
         }
         User user = from.get();
-        return String.format("Ник: %s\nИмя: %s\nФамилия: %s", user.getUserName(), user.getFirstName(), user.getLastName());
+        message.setText(String.format(PATTERN, user.getUsername()));
     }
 }
