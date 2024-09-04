@@ -1,5 +1,6 @@
 package com.example.gavno;
 
+import com.example.gavno.CallbackHandler.AddToiletPaperHandler;
 import com.example.gavno.CallbackHandler.CallbackHandler;
 import com.example.gavno.Command.*;
 import com.example.gavno.Config.BotConfig;
@@ -22,6 +23,8 @@ public class TelegramBot extends TelegramLongPollingBot {
     private final UserRepository userRepository;
     @Autowired
     private final OrderRepository orderRepository;
+    private final BotLogger logger;
+
     private final Command startCommand;
     private final Command helpCommand;
     private final Command meCommand;
@@ -34,6 +37,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         this.config = config;
         this.userRepository = userRepository;
         this.orderRepository = orderRepository;
+        this.logger = new BotLogger(System.out);
 
         this.startCommand = new StartCommand(this);
         this.helpCommand = new HelpCommand(this);
@@ -48,11 +52,11 @@ public class TelegramBot extends TelegramLongPollingBot {
                 "/buy", buyCommand
         );
         this.handlerMap = Map.of(
-                CallbackConfig.TOILET_PAPER_CALLBACK, null,
-                CallbackConfig.INSTANT_NOODLES_CALLBACK, null,
-                CallbackConfig.NEXT_CALLBACK, null,
-                CallbackConfig.PREVIOUS_CALLBACK, null,
-                CallbackConfig.BACK_CALLBACK, null
+                CallbackConfig.TOILET_PAPER_ADD, new AddToiletPaperHandler(this)
+//                CallbackConfig.INSTANT_NOODLES_CALLBACK, null,
+//                CallbackConfig.NEXT_CALLBACK, null,
+//                CallbackConfig.PREVIOUS_CALLBACK, null,
+//                CallbackConfig.BACK_CALLBACK, null
         );
     }
     @Override
@@ -85,11 +89,15 @@ public class TelegramBot extends TelegramLongPollingBot {
     }
     private void processCallbackData(Update update) {
         CallbackQuery callbackQuery = update.getCallbackQuery();
+        CallbackHandler handler = handlerMap.getOrDefault(callbackQuery.getData(), null);
 
-        CallbackHandler handler = handlerMap.get(callbackQuery.getData());
-        handler.process();
+        if (handler == null) {
+            logger.error(String.format("Unknown callback data: %s", callbackQuery.getData()));
+        } else {
+            handler.process(update);
+        }
     }
-    private boolean checkIsUserExists(Update update, Long userId) {
+    private boolean checkIsUserExists(Update update, Long userId) { // TODO: rename
         if (userRepository.existsById(userId)) {
             return true;
         }
@@ -97,14 +105,14 @@ public class TelegramBot extends TelegramLongPollingBot {
         var from = update.getMessage().getFrom();
         User user = new User(
                 userId,
-                update.getMessage().getChatId(),
-                null,
                 from.getFirstName(),
                 from.getLastName(),
                 from.getUserName(),
                 Boolean.TRUE.equals(from.getIsPremium()),
                 Boolean.TRUE.equals(from.getIsBot()),
-                Boolean.TRUE.equals(from.getCanJoinGroups())
+                Boolean.TRUE.equals(from.getCanJoinGroups()),
+                0,
+                0
         );
         userRepository.save(user);
         return false;

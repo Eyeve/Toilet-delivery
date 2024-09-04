@@ -16,8 +16,8 @@ public class Order {
     @GeneratedValue
     private Long id;
     private Long buyerId;
-    private Integer sum;
-    private Integer toiletPaper;
-    private Integer instantNoodles;
+    private int sum;
+    private int toiletPaper;
+    private int instantNoodles;
 
 }

@@ -1,14 +1,15 @@
 package com.example.gavno.CallbackHandler;
 
 import com.example.gavno.TelegramBot;
+import org.telegram.telegrambots.meta.api.objects.Update;
 
 public abstract class CallbackHandler {
 
-    private final TelegramBot bot;
+    protected final TelegramBot bot;
 
     public CallbackHandler(TelegramBot bot) {
         this.bot = bot;
     }
 
-    public abstract void process();
+    public abstract void process(Update update);
 }

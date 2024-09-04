@@ -18,6 +18,7 @@ public class StartCommand extends Command {
 
         try {
             bot.execute(message);
+            bot.getHelpCommand().execute(update);
         } catch (TelegramApiException e) {
             throw new RuntimeException(e);
         }

@@ -13,8 +13,6 @@ import lombok.NoArgsConstructor;
 public class User {
     @Id
     private Long id;
-    private Long chatId;
-    private Integer catalogId;
 
     private String firstName;
     private String lastName;
@@ -23,4 +21,8 @@ public class User {
     private boolean isPremium;
     private boolean isBot;
     private boolean canJoinGroups;
+
+    /* shopping cart */
+    private int toiletPaper;
+    private int instantNoodles;
 }
